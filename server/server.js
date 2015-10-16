@@ -38,11 +38,11 @@ boot(app, __dirname, function(err) {
 
   var stream = T.stream('statuses/filter', {track: 'mango'});
 
-	app.io.on('connection', function(){
+	app.io.on('connection', function(socket){
 		console.log('connected');
     stream.on('tweet', function(tweet){
      console.log('NEW TWEET:..', tweet);
-     //socket.emit('info', {tweet: tweet});
+     socket.emit('tweet', {tweet: tweet});
     })
 	});
 });
@@ -73,7 +73,7 @@ var getTwitterFeed = function(req, res, user, postCount){
   console.log('This was called!');
   
 }
-//Mount middleware
-// app.use('/twitter', function(req, res){
-//  getTwitterFeed(req, res);
-// });
+// Mount middleware
+app.use('/twitter', function(req, res){
+ getTwitterFeed(req, res);
+});
